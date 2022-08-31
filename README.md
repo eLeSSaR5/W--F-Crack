@@ -1,53 +1,52 @@
 # WiFiCrack
 
-WiFiCrack demonstrates of some of the security flaws associated with WPA(2) networks by demonstrating simple and efficient cracking. It captures the necessary Wi-Fi packets associated with with WPA(2) handshakes and then utilises [hashcat](https://github.com/hashcat/hashcat) to attempt to extract the hashed passkey. The script is for educational purposes and should not be misused.
+WiFiCrack, WPA(2) ağlarıyla ilişkili bazı güvenlik açıklarını basit ve verimli bir şekilde kırmayı göstererek ortaya koyuyor. WPA(2) el sıkışmalarıyla ilişkili gerekli Wi-Fi paketlerini yakalar ve ardından karma parolayı çıkarmaya çalışmak için [hashcat](https://github.com/hashcat/hashcat) kullanır. Senaryo eğitim amaçlıdır ve kötüye kullanılmamalıdır.
 
-See [WiFiCrackPy](https://github.com/phenotypic/WiFiCrackPy) for a new streamlined version of this script
 
-## Prerequisites
+## Önkoşullar
 
-You must have [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?l=en&mt=12) installed. You will need to install any other outstanding requirements:
+[Xcode](https://itunes.apple.com/us/app/xcode/id497799835?l=tr&mt=12) yüklü olmalıdır. Bekleyen diğer gereksinimleri yüklemeniz gerekecek:
 
 | Command | Installation |
 | --- | --- |
-| `hashcat` | Manual installation: install via [brew](https://brew.sh) by running `brew install hashcat`|
-| `mergecap` | Manual installation: comes with the [Wireshark](https://www.wireshark.org) application (v2.6.12) |
-| `./hashcat-utils/src/cap2hccapx.bin` | Automatic installation option when script is run |
+| `hashcat` | Manuel kurulum: `brew install hashcat`| komutunu çalıştırarak [brew](https://brew.sh) aracılığıyla yükleyin.
+| `mergecap` | Manuel kurulum: [Wireshark](https://www.wireshark.org) uygulaması (v2.6.12) ile birlikte gelir |
+| `./hashcat-utils/src/cap2hccapx.bin` | Komut dosyası çalıştırıldığında otomatik yükleme seçeneği |
 
-**Note:** You will also need to supply a word list for hashcat
+**Not:** Ayrıca hashcat için bir kelime listesi sağlamanız gerekecektir.
 
-**Note:** The script has been successfully tested with macOS Catlaina when using the `bash` shell. `zsh` may cause some problems
+**Not:** Komut dosyası, "bash" kabuğunu kullanırken macOS Catlaina ile başarıyla test edilmiştir. "zsh" bazı sorunlara neden olabilir
 
-## Usage
+## Kullanım
 
-Download with:
+#Şununla indir:
 ```
 git clone https://github.com/phenotypic/WiFiCrack.git
 ```
 
-Run from same directory with:
+Aynı dizinden şununla çalıştırın:
 ```
 bash WiFiCrack.sh
 ```
 
-The script is fairly easy to use, simply run it using the command above and enter your `sudo` password when prompted. Here are some flags you can add:
+TKomut dosyasının kullanımı oldukça kolaydır, yukarıdaki komutu kullanarak çalıştırın ve istendiğinde 'sudo' şifrenizi girin. İşte ekleyebileceğiniz bazı bayraklar:
 
-| Flag | Description |
+| Flag | Başlık |
 | --- | --- |
-| `-h` | Help: Display all available flags |
-| `-k` | Keep: Keep all captured packet files (deleted at end of session by default) |
-| `-a` | Alert: Turn off successful crack alert |
-| `-w <wordlist>` | Wordlist: Manually define a wordlist path (the script will prompt you otherwise) |
-| `-i <interface>` | Interface: Manually set Wi-Fi interface (script should normally auto-detect the correct interface) |
-| `-d <device>` | Device: Manually define 'devices' for hashcat |
+| `-h` | Yardım: Mevcut tüm bayrakları göster |
+| `-k` | Sakla: Yakalanan tüm paket dosyalarını sakla (varsayılan olarak oturumun sonunda silinir) |
+| `-a` | Uyarı: Başarılı crack uyarısını kapatın |
+| `-w <wordlist>` | Kelime listesi: Bir kelime listesi yolunu manuel olarak tanımlayın (komut dosyası size aksini sorar) |
+| `-i <interface>` | Arayüz: Wi-Fi arayüzünü manuel olarak ayarlayın (komut dosyası normalde doğru arayüzü otomatik olarak algılamalıdır) |
+| `-d <device>` | Cihaz: Hashcat için 'cihazları' manuel olarak tanımlayın |
 
-After running the script, you will be asked to choose a network to crack.
+Komut dosyasını çalıştırdıktan sonra, kırılacak bir ağ seçmeniz istenecektir.
 
-Following the selection of a network, you may have to wait for a while until a handshake occurs on the target network (i.e. for a device to (re)connect to the network), but this can be hastened by performing a [deauthentication attack](https://en.wikipedia.org/wiki/Wi-Fi_deauthentication_attack).
+Bir ağ seçiminin ardından, hedef ağda bir el sıkışma gerçekleşene kadar (yani bir cihazın ağa (yeniden) bağlanması için) bir süre beklemeniz gerekebilir, ancak bu, bir [yetki doğrulama saldırısı] gerçekleştirilerek hızlandırılabilir. (https://en.wikipedia.org/wiki/Wi-Fi_deauthentication_attack).
 
-Once a handshake is captured, WiFiCrack will initialise `hashcat` to extract the Wi-Fi password. This step may take a while depending on a number of factors including your processing power. If successful you will be presented with the password, otherwise, WiFiCrack will retain the handshake in its directory if you would like to perform another type of attack against the capture.
+Bir el sıkışma yakalandığında, WiFiCrack, Wi-Fi şifresini çıkarmak için "hashcat"i başlatır. Bu adım, işlem gücünüz de dahil olmak üzere bir dizi faktöre bağlı olarak biraz zaman alabilir. Başarılı olursa, size parola sunulacaktır, aksi takdirde, ele geçirmeye karşı başka bir tür saldırı gerçekleştirmek isterseniz WiFiCrack el sıkışmayı dizininde tutacaktır.
 
-## To-do list
+## Yapılacak Listesi
 
-- [ ] Integrate deauthentication attack into main script
-- [ ] Provide more `hashcat` attack options (e.g. brute force)
+- [ ] Kimlik doğrulama saldırısını ana komut dosyasına entegre edin
+- [ ] Daha fazla "hashcat" saldırı seçeneği sağlayın (ör. kaba kuvvet)
